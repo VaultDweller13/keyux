@@ -17,7 +17,9 @@ export function focusGroupKeyUX(options) {
         return
       }
 
-      let menu = event.target.closest('[role="menu"]')
+      let menu =
+        event.target.closest('[role="menu"]') ||
+        event.target.closest('[role="menubar"]')
       if (!menu) return
 
       let items = menu.querySelectorAll('[role="menuitem"]')
@@ -25,7 +27,11 @@ export function focusGroupKeyUX(options) {
 
       let nextKey = 'ArrowDown'
       let prevKey = 'ArrowUp'
-      if (menu.getAttribute('aria-orientation') === 'horizontal') {
+      const horizontal =
+        menu.getAttribute('aria-orientation') === 'horizontal' ||
+        (menu.role === 'menubar' &&
+          menu.getAttribute('aria-orientation') !== 'vertical')
+      if (horizontal) {
         if (window.document.dir === 'rtl') {
           nextKey = 'ArrowLeft'
           prevKey = 'ArrowRight'
@@ -76,7 +82,9 @@ export function focusGroupKeyUX(options) {
 
     function focusIn(event) {
       if (event.target.role === 'menuitem') {
-        let menu = event.target.closest('[role="menu"]')
+        let menu =
+          event.target.closest('[role="menu"]') ||
+          event.target.closest('[role="menubar"]')
         if (!menu) return
 
         if (!inMenu) {
