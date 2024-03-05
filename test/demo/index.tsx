@@ -8,7 +8,7 @@ import {
   hotkeyKeyUX,
   jumpKeyUX,
   likelyWithKeyboard,
-  menuKeyUX,
+  focusGroupKeyUX,
   pressKeyUX,
   startKeyUX
 } from '../../index.js'
@@ -17,7 +17,7 @@ let overrides: HotkeyOverride = {}
 
 startKeyUX(window, [
   hotkeyKeyUX(overrides),
-  menuKeyUX(),
+  focusGroupKeyUX(),
   pressKeyUX('is-pressed'),
   jumpKeyUX(),
   hiddenKeyUX()
