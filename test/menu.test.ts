@@ -62,6 +62,56 @@ test('adds menu navigation', () => {
   equal(window.document.activeElement, items[0])
 })
 
+test('adds menubar navigation', () => {
+  let window = new JSDOM().window
+  startKeyUX(window, [focusGroupKeyUX()])
+
+  window.document.body.innerHTML =
+    '<nav role="menubar" aria-orientation="vertical">' +
+    '<a href="#" role="menuitem">Home</a>' +
+    '<a href="#" role="menuitem">About</a>' +
+    '<a href="#" role="menuitem">Contact</a>' +
+    '</nav>'
+  let items = window.document.querySelectorAll('a')
+  items[0].focus()
+
+  equal(window.document.activeElement, items[0])
+  equal(
+    window.document.body.innerHTML,
+    '<nav role="menubar" aria-orientation="vertical">' +
+      '<a href="#" role="menuitem">Home</a>' +
+      '<a href="#" role="menuitem" tabindex="-1">About</a>' +
+      '<a href="#" role="menuitem" tabindex="-1">Contact</a>' +
+      '</nav>'
+  )
+
+  press(window, 'ArrowDown')
+  equal(window.document.activeElement, items[1])
+  equal(
+    window.document.body.innerHTML,
+    '<nav role="menubar" aria-orientation="vertical">' +
+      '<a href="#" role="menuitem" tabindex="-1">Home</a>' +
+      '<a href="#" role="menuitem" tabindex="0">About</a>' +
+      '<a href="#" role="menuitem" tabindex="-1">Contact</a>' +
+      '</nav>'
+  )
+
+  press(window, 'ArrowUp')
+  equal(window.document.activeElement, items[0])
+
+  press(window, 'End')
+  equal(window.document.activeElement, items[2])
+
+  press(window, 'Home')
+  equal(window.document.activeElement, items[0])
+
+  press(window, 'ArrowUp')
+  equal(window.document.activeElement, items[2])
+
+  press(window, 'ArrowDown')
+  equal(window.document.activeElement, items[0])
+})
+
 test('stops tacking on loosing focus', () => {
   let window = new JSDOM().window
   startKeyUX(window, [focusGroupKeyUX()])
